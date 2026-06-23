@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activer un partenaire prescripteur <title>Qualifier et suivre un lead &mdash; Cockpit'Gest</title>mdash; Cockpit'Gest</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --base: #1A1226; --base-800: #251B33; --base-700: #322545; --base-600: #3F2E57;
+  --accent: #A855F7; --accent-light: #C99BF5; --sidebar: #211A2E;
+  --info: #38BDF8; --green: #34D399; --red: #F87171; --orange: #FBBF24;
+  --text: #EDE7F4; --text-muted: #A99FB8; --border: #2E2440; --card: #251B33;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Space Grotesk', sans-serif; background: var(--base); color: var(--text); min-height: 100vh; line-height: 1.6; }
+nav { position: sticky; top: 0; z-index: 100; background: rgba(33,26,46,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(168,85,247,0.2); padding: 14px 32px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+.nav-logo { font-size: 1.1rem; color: var(--accent-light); font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
+nav a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color .2s; }
+nav a:hover { color: var(--accent-light); }
+.nav-badge { margin-left: auto; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4); color: var(--accent-light); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.hero { background: linear-gradient(135deg, #211A2E 0%, #2C2140 50%, #211A2E 100%); border-bottom: 1px solid rgba(168,85,247,0.15); padding: 56px 32px 44px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.12) 0%, transparent 70%); pointer-events: none; }
+.hero-label { display: inline-block; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: var(--accent-light); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; position: relative; z-index: 1; }
+.hero .emoji { display: block; font-size: 2.4rem; margin-bottom: 8px; line-height: 1; }
+.hero h1 { font-size: 2.4rem; font-weight: 700; color: #FBFAFE; margin-bottom: 12px; letter-spacing: -0.02em; position: relative; z-index: 1; }
+.hero p { color: var(--text-muted); font-size: 0.95rem; max-width: 640px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 18px; position: relative; z-index: 1; }
+.hero-tag { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-size: 0.72rem; padding: 3px 10px; border-radius: 14px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(168,85,247,0.1); border-top: 1px solid rgba(168,85,247,0.1); border-bottom: 1px solid rgba(168,85,247,0.1); }
+.kpi-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-card { background: var(--base); padding: 26px 18px; text-align: center; transition: background .2s; }
+.kpi-card:hover { background: var(--base-800); }
+.kpi-value { font-size: 2rem; font-weight: 700; color: var(--accent-light); line-height: 1; margin-bottom: 8px; }
+.kpi-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; }
+.main { max-width: 960px; margin: 0 auto; padding: 48px 24px 32px; }
+.section-title { font-size: 1.3rem; font-weight: 600; color: #FBFAFE; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid rgba(168,85,247,0.2); display: flex; align-items: center; gap: 12px; }
+.section-title .num { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: var(--accent-light); font-size: 0.75rem; font-weight: 700; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; }
+.section { margin-bottom: 48px; }
+.section-intro { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+.step-list { display: flex; flex-direction: column; gap: 14px; }
+.step-item { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; transition: border-color .2s; }
+.step-item:hover { border-color: rgba(168,85,247,0.25); }
+.step-header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; flex-wrap: wrap; }
+.step-num { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; color: var(--accent-light); background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); padding: 6px 12px; border-radius: 6px; min-width: 50px; text-align: center; }
+.step-title { font-weight: 600; font-size: 0.95rem; flex: 1; color: #FBFAFE; }
+.step-body { padding: 0 20px 18px; border-top: 1px solid rgba(255,255,255,0.05); }
+.step-items { list-style: none; padding-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.step-items li { font-size: 0.87rem; color: var(--text-muted); padding-left: 18px; position: relative; }
+.step-items li::before { content: '>'; position: absolute; left: 0; top: 0; color: var(--accent); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+.step-items li strong { color: var(--text); font-weight: 600; }
+.step-items li code { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: rgba(15,10,22,0.6); padding: 1px 6px; border-radius: 4px; color: var(--accent-light); }
+.step-tip { background: rgba(168,85,247,0.06); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 14px; font-size: 0.85rem; color: var(--accent-light); }
+.step-tip strong { color: var(--accent); }
+.step-warn { background: rgba(248,113,113,0.06); border-left: 3px solid var(--red); border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 14px; font-size: 0.85rem; color: #FCA5A5; }
+.step-warn strong { color: var(--red); }
+.step-ok { background: rgba(52,211,153,0.06); border-left: 3px solid var(--green); border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 14px; font-size: 0.85rem; color: #86EFAC; }
+.step-ok strong { color: var(--green); }
+.table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 8px; background: var(--card); border-radius: 8px; overflow: hidden; }
+.table th { text-align: left; padding: 10px 14px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-muted); }
+.table tr:last-child td { border-bottom: none; }
+.table td:first-child { color: var(--text); font-weight: 500; }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--accent-light); }
+.ref-block { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; }
+.ref-block h3 { font-size: 1.05rem; color: #FBFAFE; margin-bottom: 10px; font-weight: 600; }
+.ref-block p, .ref-block li { color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; }
+.ref-block p { margin-bottom: 8px; }
+.ref-block ul { padding-left: 18px; }
+.ref-block a { color: var(--accent-light); text-decoration: none; }
+.faq-item { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; margin-bottom: 8px; overflow: hidden; transition: border-color .2s; }
+.faq-item:hover { border-color: rgba(168,85,247,0.2); }
+.faq-item details summary { padding: 14px 18px; cursor: pointer; font-weight: 600; font-size: 0.92rem; color: #FBFAFE; display: flex; align-items: center; gap: 12px; list-style: none; }
+.faq-item details summary::-webkit-details-marker { display: none; }
+.faq-item details summary::before { content: '+'; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); border-radius: 6px; color: var(--accent-light); font-family: 'JetBrains Mono', monospace; font-weight: 700; flex-shrink: 0; transition: transform .2s; }
+.faq-item details[open] summary::before { content: '-'; }
+.faq-item details summary:hover { color: var(--accent-light); }
+.faq-answer { padding: 0 18px 16px 52px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.65; }
+.faq-answer code { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: rgba(15,10,22,0.6); padding: 1px 6px; border-radius: 4px; color: var(--accent-light); }
+.faq-answer strong { color: var(--text); }
+.faq-answer a { color: var(--accent-light); text-decoration: none; }
+footer { text-align: center; padding: 28px 24px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; color: var(--text-muted); margin-top: 40px; }
+footer a { color: var(--accent-light); text-decoration: none; }
+@media (max-width: 720px) { .kpi-grid, .kpi-grid.cols-3 { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 1.8rem; } .main { padding: 32px 18px; } nav { padding: 12px 18px; gap: 18px; } .nav-badge { margin-left: 0; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index-complet.html" class="nav-logo">Cockpit'Gest Docs</a>
+  <a href="../index-complet.html">Accueil</a>
+  <a href="../notice-utilisation.html">Notice</a>
+  <a href="../ref-faq.html">FAQ</a>
+  <span class="nav-badge">v0.1</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Sc&eacute;nario</div>
+  <span class="emoji">&#129309;</span>
+  <h1>Activer un partenaire prescripteur</h1>
+  <p>Un parcours complet : d'un prescripteur rep&eacute;r&eacute; jusqu'a un partenariat actif, en pilotant
+     chaque relance par une prochaine action dat&eacute;e.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">Prescripteurs</span>
+    <span class="hero-tag">Prochaine action</span>
+    <span class="hero-tag">Parcours complet</span>
+  </div>
+</div>
+
+<div class="kpi-grid cols-3">
+  <div class="kpi-card"><div class="kpi-value">4</div><div class="kpi-label">Etapes du parcours</div></div>
+  <div class="kpi-card"><div class="kpi-value">1</div><div class="kpi-label">Ecran mobilise</div></div>
+  <div class="kpi-card"><div class="kpi-value">&#8594;</div><div class="kpi-label">Vers un partenaire actif</div></div>
+</div>
+
+<div class="main">
+
+  <div class="ref-block" style="border-color:rgba(168,85,247,0.3);background:rgba(168,85,247,0.04);margin-bottom:28px">
+    <h3>&#9654; Tutoriel anim&eacute;</h3>
+    <p>Pr&eacute;f&eacute;rez voir le parcours en mouvement ? <a href="../tuto-scenario-partenaire.html">Lancez la
+       d&eacute;mo anim&eacute;e</a>, &eacute;cran par &eacute;cran avec narration.</p>
+  </div>
+
+  <div class="section" id="contexte">
+    <div class="section-title"><span class="num">0</span> Contexte</div>
+    <p class="section-intro">Vous avez identifi&eacute; un organisme ou une personne capable de vous recommander,
+       et vous voulez transformer cette piste en partenariat actif.</p>
+    <div class="ref-block"><h3>Pr&eacute;requis</h3>
+      <p>L'&eacute;cran <a href="../com-partenaires.html">Partenaires</a> est votre espace de travail ici. Un
+         partenaire ne devient g&eacute;n&eacute;ralement pas client : il vous <strong>recommande</strong>
+         aupr&egrave;s de ses propres contacts.</p>
+    </div>
+  </div>
+
+  <div class="section" id="parcours">
+    <div class="section-title"><span class="num">1</span> Le parcours pas &agrave; pas</div>
+    <div class="step-list">
+
+      <div class="step-item">
+        <div class="step-header"><span class="step-num">1</span><span class="step-title">Cibler le prescripteur</span></div>
+        <div class="step-body"><ul class="step-items">
+          <li>Dans <a href="../com-partenaires.html">Partenaires</a>, cr&eacute;ez la fiche : nom, type
+              (f&eacute;d&eacute;ration, organisme de formation, m&eacute;dia&hellip;), contact.</li>
+          <li>Le statut d&eacute;marre a <code>cible</code>.</li>
+        </ul></div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header"><span class="step-num">2</span><span class="step-title">Premier contact</span></div>
+        <div class="step-body"><ul class="step-items">
+          <li>Apr&egrave;s un premier &eacute;change, passez le statut a <code>contacte</code>.</li>
+          <li>Renseignez une <strong>prochaine action</strong> dat&eacute;e (relance, envoi d'un dossier&hellip;).</li>
+        </ul>
+        <div class="step-tip"><strong>Astuce :</strong> la liste se trie par prochaine action : vous savez
+           toujours qui relancer en priorit&eacute;.</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header"><span class="step-num">3</span><span class="step-title">Activer le partenariat</span></div>
+        <div class="step-body"><ul class="step-items">
+          <li>Quand le partenaire accepte de vous recommander, passez le statut a <code>actif</code>.</li>
+          <li>Les <strong>notes</strong> gardent l'historique des &eacute;changes.</li>
+        </ul></div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header"><span class="step-num">4</span><span class="step-title">Entretenir la relation</span></div>
+        <div class="step-body"><ul class="step-items">
+          <li>Continuez a programmer une prochaine action a chaque &eacute;tape pour ne jamais laisser la
+              relation retomber.</li>
+        </ul>
+        <div class="step-ok"><strong>R&eacute;sultat :</strong> un r&eacute;seau de prescripteurs suivi dans la
+           dur&eacute;e, sans qu'aucune piste ne passe a la trappe.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section" id="rappel">
+    <div class="section-title"><span class="num">2</span> Bon &agrave; savoir</div>
+    <div class="ref-block">
+      <p>Il n'y a pas de suppression d&eacute;finitive d'un partenaire : une relation en sommeil passe en
+         <code>inactif</code>. C'est volontaire, pour pr&eacute;server l'historique de vos &eacute;changes.</p>
+    </div>
+  </div>
+
+  <div class="section" id="suite">
+    <div class="section-title"><span class="num">3</span> Pour aller plus loin</div>
+    <div class="ref-block"><h3>Pages li&eacute;es</h3>
+      <p>&bull; <a href="../com-partenaires.html">Partenaires &amp; prescripteurs</a></p>
+      <p>&bull; <a href="index.html">Tous les sc&eacute;narios</a></p>
+    </div>
+  </div>
+</div>
+<footer>
+  Cockpit'Gest &mdash; No Sage's Editor &mdash; v0.1 &middot; Documentation utilisateur
+  <br>
+  &#128231; <a href="mailto:contact@no-sages-editor.com">contact@no-sages-editor.com</a>
+  &middot;
+  <a href="../index-complet.html">&larr; Documentation</a>
+  &middot;
+  <a href="index.html">Sc&eacute;narios</a>
+</footer>
+</body>
+</html>
