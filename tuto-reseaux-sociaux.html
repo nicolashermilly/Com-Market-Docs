@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutoriel anime - Reseaux sociaux - Cockpit'Gest</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --base:#1A1226; --surface:#211A2E; --surface-2:#2A2138; --win:#1E1729; --field:#160F22;
+  --accent:#A855F7; --accent-light:#C084FC; --accent-pale:#E9D5FF;
+  --info:#67E8F9; --ref:#818CF8; --green:#6EE7B7; --red:#FCA5A5;
+  --text:#E8E3F0; --text-muted:#A99FB8; --border:#34293F;
+  --sans:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--base);color:var(--text);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-light);text-decoration:none}
+code{font-family:var(--mono);font-size:.82em;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:5px;color:var(--accent-light)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(26,18,38,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(168,85,247,.22);padding:14px 32px;display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.nav-logo{font-family:var(--sans);font-size:1.1rem;color:var(--accent-light);font-weight:700}
+nav a{color:var(--text-muted);font-size:.85rem;font-weight:500;transition:color .2s}
+nav a:hover{color:var(--accent-light)}
+.nav-badge{margin-left:auto;background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.4);color:var(--accent-light);padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:600}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1A1226 0%,#211A2E 50%,#1A1226 100%);border-bottom:1px solid rgba(168,85,247,.15);padding:46px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(168,85,247,.10) 0%,transparent 70%);pointer-events:none}
+.hero-label{display:inline-block;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--accent-light);font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:14px;position:relative;z-index:1}
+.hero h1{font-family:var(--sans);font-size:2.1rem;font-weight:700;color:#F6F2FB;margin-bottom:10px;letter-spacing:-.01em;position:relative;z-index:1}
+.hero p{color:var(--text-muted);font-size:.92rem;max-width:600px;margin:0 auto;position:relative;z-index:1}
+
+.main{max-width:920px;margin:0 auto;padding:34px 20px 48px}
+
+/* PLAYER */
+.player{background:var(--surface);border:1px solid rgba(168,85,247,.25);border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+.stage{position:relative;background:#120C1B;aspect-ratio:16/9;overflow:hidden}
+.screen{position:absolute;inset:0;opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease;padding:26px;display:flex;flex-direction:column;gap:14px}
+.screen.active{opacity:1;transform:none}
+.win{background:var(--win);border:1px solid rgba(255,255,255,.08);border-radius:10px;flex:1;display:flex;flex-direction:column;overflow:hidden}
+.win-bar{background:var(--surface-2);border-bottom:1px solid rgba(255,255,255,.06);padding:9px 14px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--text-muted)}
+.dot{width:9px;height:9px;border-radius:50%}
+.dot.r{background:#FF5F57}.dot.y{background:#FEBC2E}.dot.g{background:#28C840}
+.win-title{margin-left:10px;font-family:var(--mono);font-size:.74rem;color:var(--text-muted)}
+.win-body{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+
+/* mock components */
+.dropzone{border:2px dashed rgba(168,85,247,.45);border-radius:10px;padding:26px;text-align:center;color:var(--text-muted);background:rgba(168,85,247,.05)}
+.dropzone .ic{font-size:1.8rem;display:block;margin-bottom:6px}
+.field{background:var(--field);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:9px 12px;font-size:.82rem;color:var(--text)}
+.lbl{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:3px}
+.mono{font-family:var(--mono);color:var(--accent-light)}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(129,140,248,.14);border:1px solid rgba(129,140,248,.35);color:#C7D2FE;border-radius:16px;padding:4px 12px;font-size:.78rem;width:max-content}
+.chip.accent{background:rgba(168,85,247,.14);border-color:rgba(168,85,247,.4);color:var(--accent-light)}
+.docpage{background:#fff;color:#1A1226;border-radius:6px;padding:14px;font-size:.62rem;position:relative;min-height:120px}
+.docpage .h{background:#1A1226;color:#fff;text-align:center;font-family:var(--sans);letter-spacing:1px;padding:8px;border-radius:4px;margin:-14px -14px 10px}
+.toggle{display:flex;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden;width:max-content}
+.toggle span{padding:7px 14px;font-size:.8rem;color:var(--text-muted)}
+.toggle span.on{background:rgba(168,85,247,.18);color:var(--accent-light)}
+.btn-send{align-self:flex-end;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text);font-weight:600;font-size:.82rem;padding:9px 18px;border-radius:8px}
+.btn-send.accent{background:var(--accent);color:#1A1226;font-weight:700;border-color:var(--accent)}
+.status{display:flex;align-items:center;gap:10px;font-size:.85rem;flex-wrap:wrap}
+.pill{font-size:.72rem;font-weight:700;padding:3px 11px;border-radius:12px}
+.pill.cur{background:rgba(168,85,247,.15);color:var(--accent-light);border:1px solid rgba(168,85,247,.3)}
+.pill.done{background:rgba(110,231,183,.12);color:var(--green);border:1px solid rgba(110,231,183,.25)}
+.bar{height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-light))}
+.muted{color:var(--text-muted);font-size:.8rem}
+.big{font-family:var(--sans);font-size:1.1rem;font-weight:600;color:#F6F2FB}
+
+/* url field */
+.urlbar{font-family:var(--mono);font-size:.8rem;background:var(--field);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:11px 12px;color:var(--text);word-break:break-all}
+.urlbar .tid{color:var(--accent-light);font-weight:600}
+
+/* checklist */
+.evt{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--text-muted)}
+.evt .box{width:16px;height:16px;border-radius:4px;border:1px solid rgba(255,255,255,.2)}
+.evt.on{color:var(--text)}
+.evt.on .box{background:var(--accent);border-color:var(--accent);color:#1A1226;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700}
+.evt .mono{font-family:var(--mono)}
+
+/* highlight pulse */
+.hl{position:relative}
+.hl::after{content:'';position:absolute;inset:-6px;border:2px solid var(--accent);border-radius:10px;animation:pulse 1.6s infinite;pointer-events:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(168,85,247,.45);opacity:1}70%{box-shadow:0 0 0 10px rgba(168,85,247,0);opacity:.7}100%{box-shadow:0 0 0 0 rgba(168,85,247,0);opacity:1}}
+
+/* legende + stepnum */
+.legende{position:absolute;left:18px;top:18px;z-index:5;background:rgba(26,18,38,.85);border:1px solid rgba(168,85,247,.4);color:var(--accent-light);font-size:.74rem;font-weight:600;letter-spacing:.03em;padding:6px 12px;border-radius:8px;backdrop-filter:blur(6px);max-width:70%}
+.stepnum{position:absolute;right:18px;top:18px;z-index:5;font-family:var(--mono);font-size:.74rem;color:var(--accent-light);background:rgba(26,18,38,.85);border:1px solid rgba(168,85,247,.3);padding:5px 10px;border-radius:8px}
+
+/* subtitle */
+.subtitle{position:absolute;left:0;right:0;bottom:0;z-index:5;background:linear-gradient(to top,rgba(18,12,27,.96),rgba(18,12,27,.6) 70%,transparent);padding:30px 22px 16px;font-size:.92rem;color:#F4EFFA;text-align:center}
+
+/* controls */
+.controls{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--surface-2);border-top:1px solid rgba(255,255,255,.06)}
+.ctrl-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text);border-radius:8px;padding:8px 12px;font-size:.85rem;cursor:pointer;font-family:inherit;transition:.15s}
+.ctrl-btn:hover{border-color:rgba(168,85,247,.5);color:var(--accent-light)}
+.ctrl-btn.play{background:var(--accent);color:#1A1226;font-weight:700;border-color:var(--accent)}
+.progress{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-light));transition:width .25s linear}
+.counter{font-family:var(--mono);font-size:.78rem;color:var(--text-muted);min-width:42px;text-align:right}
+
+/* sections */
+.section-title{font-family:var(--sans);font-size:1.25rem;font-weight:600;color:#F6F2FB;margin:40px 0 16px;padding-bottom:10px;border-bottom:1px solid rgba(168,85,247,.2);display:flex;align-items:center;gap:12px}
+.section-title .num{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:var(--accent-light);font-size:.72rem;font-weight:700;min-width:28px;height:28px;padding:0 6px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.script{display:flex;flex-direction:column;gap:14px;counter-reset:sc}
+.sc{counter-increment:sc;background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:14px 16px 14px 56px;position:relative}
+.sc::before{content:counter(sc,decimal-leading-zero);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:8px;background:var(--base);border:1px solid rgba(168,85,247,.4);color:var(--accent-light);font-weight:700;font-size:.78rem;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+.sc .t{font-weight:600;color:#F6F2FB;margin-bottom:3px}
+.sc .vo{color:var(--text);font-size:.92rem}
+.sc .ec{color:var(--text-muted);font-size:.8rem;margin-top:5px}
+.sc .ec b{color:var(--accent-light);font-weight:600}
+
+.tip{background:rgba(103,232,249,.08);border:1px solid rgba(103,232,249,.3);color:#A5EEFA;border-radius:8px;padding:12px 14px;font-size:.86rem;margin-top:18px}
+.tip b{color:#F6F2FB}
+
+/* depannage */
+.troubleshoot{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.ts-row{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:11px 14px;font-size:.86rem}
+.ts-code{font-family:var(--mono);font-weight:600;font-size:.8rem;padding:3px 9px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.ts-code.err{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.3);color:#FCA5A5}
+.ts-code.ok{background:rgba(110,231,183,.12);border:1px solid rgba(110,231,183,.3);color:#6EE7B7}
+.ts-row .d{color:var(--text-muted)}
+.ts-row .d b{color:#F6F2FB;font-weight:600}
+
+footer{text-align:center;padding:30px;border-top:1px solid rgba(255,255,255,.06);font-size:.8rem;color:var(--text-muted);margin-top:40px;line-height:1.8}
+@media(max-width:600px){.hero h1{font-size:1.6rem}.subtitle{font-size:.82rem}.legende{font-size:.66rem}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index-complet.html" class="nav-logo">Cockpit'Gest Docs</a>
+  <a href="index-complet.html">Accueil</a>
+  <a href="com-reseaux-sociaux.html">R&eacute;seaux sociaux</a>
+  <a href="ref-faq.html">FAQ</a>
+  <span class="nav-badge">v0.1</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Tutoriel anim&eacute;</div>
+  <h1>Cr&eacute;er et planifier un post</h1>
+  <p>D&eacute;monstration anim&eacute;e : du tableau des posts &agrave; la planification d'une publication sur un canal.</p>
+</div>
+
+<div class="main">
+
+  <div class="player">
+    <div class="stage" id="stage">
+      <div class="legende" id="legende"></div>
+      <div class="stepnum" id="stepnum"></div>
+
+      <div class="screen" data-i="0">
+        <div class="win">
+          <div class="win-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="win-title">Cockpit'Gest &mdash; R&eacute;seaux sociaux</span></div>
+          <div class="win-body" style="gap:10px;justify-content:flex-start">
+            <div class="row" style="align-items:center">
+              <div class="chip">Statut : tous</div>
+              <div class="chip">Canal : tous</div>
+              <div class="btn-send accent hl" style="align-self:auto;margin-left:auto">+ Nouveau post</div>
+            </div>
+            <div class="field"><span class="lbl">Post</span>SEO local : se faire trouver <span class="pill done" style="margin-left:8px">Publi&eacute;</span></div>
+            <div class="field"><span class="lbl">Post</span>Astuce acquisition du mois <span class="pill cur" style="margin-left:8px">Planifi&eacute;</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" data-i="1">
+        <div class="win">
+          <div class="win-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="win-title">Nouveau post</span></div>
+          <div class="win-body" style="gap:12px;justify-content:flex-start">
+            <div class="field hl"><span class="lbl">Titre interne</span>Lancement offre Fondateurs</div>
+            <div class="muted">Panneau de cr&eacute;ation (coque Drawer du tronc).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" data-i="2">
+        <div class="win">
+          <div class="win-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="win-title">Nouveau post &middot; champs</span></div>
+          <div class="win-body" style="gap:9px;justify-content:flex-start">
+            <div class="field"><span class="lbl">Titre interne</span>Lancement offre Fondateurs</div>
+            <div class="row">
+              <div class="field hl"><span class="lbl">Canal</span><span class="mono">LinkedIn</span></div>
+              <div class="field"><span class="lbl">Contenu li&eacute;</span><span class="mono">SEO local</span></div>
+            </div>
+            <div class="field"><span class="lbl">Mod&egrave;le</span><span class="mono">post_social &middot; standard</span></div>
+            <div class="field"><span class="lbl">Texte</span>Notre offre Fondateurs ouvre&hellip;</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" data-i="3">
+        <div class="win">
+          <div class="win-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="win-title">Planification</span></div>
+          <div class="win-body" style="gap:14px;justify-content:flex-start">
+            <div class="field"><span class="lbl">Date de planification</span><span class="mono">2026-07-01</span></div>
+            <div>
+              <span class="lbl">Statut</span>
+              <div class="toggle"><span>Brouillon</span><span class="on">Planifi&eacute;</span><span>Publi&eacute;</span></div>
+            </div>
+            <div class="btn-send accent hl">Enregistrer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" data-i="4">
+        <div class="win">
+          <div class="win-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="win-title">Cockpit'Gest &mdash; R&eacute;seaux sociaux</span></div>
+          <div class="win-body" style="gap:14px">
+            <div class="status"><span class="big">Lancement offre Fondateurs</span> <span class="pill cur" id="st-pill" data-pending="Planifi&eacute;" data-done="Publi&eacute;">Planifi&eacute;</span></div>
+            <div class="bar"><i id="st-bar" style="width:8%"></i></div>
+            <div class="urlbar">https://www.linkedin.com/posts/&hellip;</div>
+            <div class="muted">Une fois en ligne, le statut passe &agrave; Publi&eacute; et l'URL est conserv&eacute;e.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subtitle" id="subtitle"></div>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl-btn" id="prev">&#9664; Pr&eacute;c&eacute;dent</button>
+      <button class="ctrl-btn play" id="play">&#9208; Pause</button>
+      <button class="ctrl-btn" id="next">Suivant &#9654;</button>
+      <div class="progress"><i id="prog"></i></div>
+      <div class="counter" id="counter">1 / 5</div>
+    </div>
+  </div>
+
+  <div class="section-title"><span class="num">VO</span> Script narr&eacute; &mdash; commentaires voix off</div>
+  <p class="muted" style="margin-bottom:14px">&Agrave; lire en voix off pendant l'enregistrement de l'&eacute;cran.</p>
+  <div class="script" id="script"></div>
+
+  <div class="section-title"><span class="num">SOS</span> D&eacute;pannage</div>
+  <div class="troubleshoot">
+    <div class="ts-row"><span class="ts-code err">Canal vide</span><span class="d"><b>Aucun canal propos&eacute;.</b> Cr&eacute;ez d'abord un canal dans Param&egrave;tres &rsaquo; Canaux ; il appara&icirc;tra ensuite dans la liste d&eacute;roulante du post.</span></div>
+    <div class="ts-row"><span class="ts-code err">Mod&egrave;le 0</span><span class="d"><b>Aucun mod&egrave;le disponible.</b> Ajoutez un gabarit de type <code>post_social</code> dans Param&egrave;tres &rsaquo; Mod&egrave;les de contenu.</span></div>
+    <div class="ts-row"><span class="ts-code ok">Brouillon</span><span class="d"><b>Pas de date ?</b> Le post reste en Brouillon : il n'est pas compt&eacute; comme planifi&eacute; tant qu'il n'a ni date ni statut Planifi&eacute;.</span></div>
+  </div>
+
+  <div class="tip"><b>Conseil.</b> Ce module planifie et documente vos posts : il n'y a <b>pas</b> de publication automatique vers le r&eacute;seau (aucun connecteur Buffer ou Meta). Apr&egrave;s publication manuelle, revenez coller l'URL et passez le statut &agrave; Publi&eacute;.</div>
+
+</div>
+
+<footer>
+  Cockpit'Gest &mdash; No Sage's Editor &middot; v0.1 &middot; Tutoriel &laquo; Cr&eacute;er et planifier un post &raquo; &middot; <a href="com-reseaux-sociaux.html">Fiche du module R&eacute;seaux sociaux</a><br>
+  contact@no-sages-editor.com
+</footer>
+
+<script>
+const steps = [
+  {
+    "titre": "Ouvrir R\u00e9seaux sociaux",
+    "legende": "\u00c9tape 1 \u2014 Le tableau",
+    "vo": "Dans la navigation, ouvrez R\u00e9seaux sociaux. Vous retrouvez tous vos posts, filtrables par statut et par canal.",
+    "ec": "Comm et Marketing \u203a R\u00e9seaux sociaux."
+  },
+  {
+    "titre": "Nouveau post",
+    "legende": "\u00c9tape 2 \u2014 Cr\u00e9er",
+    "vo": "Cliquez sur Nouveau post : le panneau de cr\u00e9ation s'ouvre sur la droite.",
+    "ec": "Bouton Nouveau post \u2192 panneau."
+  },
+  {
+    "titre": "Renseigner le post",
+    "legende": "\u00c9tape 3 \u2014 Les champs",
+    "vo": "Donnez un titre interne, choisissez le canal, rattachez un contenu et un mod\u00e8le, puis r\u00e9digez le texte.",
+    "ec": "Titre, canal, contenu, mod\u00e8le, texte."
+  },
+  {
+    "titre": "Planifier",
+    "legende": "\u00c9tape 4 \u2014 Date et statut",
+    "vo": "Choisissez une date de publication et passez le statut \u00e0 Planifi\u00e9, puis enregistrez.",
+    "ec": "Date de planif + statut Planifi\u00e9 \u2192 Enregistrer."
+  },
+  {
+    "titre": "Suivre et publier",
+    "legende": "\u00c9tape 5 \u2014 Cycle de vie",
+    "vo": "Le post rejoint le tableau. Une fois en ligne, passez-le \u00e0 Publi\u00e9 et collez l'URL.",
+    "ec": "Statut Publi\u00e9 + URL du post."
+  }
+];
+
+const screens=[...document.querySelectorAll('.screen')];
+const legende=document.getElementById('legende');const stepnum=document.getElementById('stepnum');
+const subtitle=document.getElementById('subtitle');const prog=document.getElementById('prog');
+const counter=document.getElementById('counter');const playBtn=document.getElementById('play');
+let i=0, playing=true, t0=0, raf=null;const DUR=7000;
+function render(){
+  screens.forEach((s,k)=>s.classList.toggle('active',k===i));
+  legende.textContent=steps[i].legende;stepnum.textContent=(i+1)+' / '+steps.length;
+  subtitle.textContent=steps[i].vo;counter.textContent=(i+1)+' / '+steps.length;
+  if(i===steps.length-1){ const p=document.getElementById('st-pill'),b=document.getElementById('st-bar');
+    if(p&&b){ const pend=p.dataset.pending||p.textContent, done=p.dataset.done||'OK';
+      p.textContent=pend;p.className='pill cur';b.style.width='8%';
+      setTimeout(()=>{if(i===steps.length-1){p.textContent=done;p.className='pill done';b.style.width='100%';}},2500); } }
+}
+function go(n){ i=(n+steps.length)%steps.length; t0=performance.now(); render(); }
+function tick(now){ if(playing){ const e=now-t0; let pct=Math.min(e/DUR,1); prog.style.width=(pct*100)+'%'; if(pct>=1){ go(i+1); } } raf=requestAnimationFrame(tick); }
+function setPlay(p){ playing=p; playBtn.textContent=p?'\u23f8 Pause':'\u25b6 Lecture'; playBtn.classList.toggle('play',p); if(p)t0=performance.now()-(parseFloat(prog.style.width||0)/100*DUR); }
+document.getElementById('prev').onclick=()=>{go(i-1)};document.getElementById('next').onclick=()=>{go(i+1)};
+playBtn.onclick=()=>setPlay(!playing);
+document.getElementById('script').innerHTML=steps.map(s=>`<div class="sc"><div class="t">${s.titre}</div><div class="vo">\u00ab ${s.vo} \u00bb</div><div class="ec"><b>\u00c0 l'\u00e9cran :</b> ${s.ec}</div></div>`).join('');
+go(0); raf=requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>
