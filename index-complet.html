@@ -44,6 +44,7 @@ a.doc-card:hover { border-color: rgba(168,85,247,0.35); transform: translateY(-2
 .doc-card.soon { opacity: 0.5; cursor: default; }
 .doc-card.soon .title { color: var(--text-muted); }
 .badge-soon { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; }
+.badge-preview { position: absolute; top: 14px; right: 14px; background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.4); color: var(--accent-light); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; }
 footer { text-align: center; padding: 28px 24px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; color: var(--text-muted); margin-top: 40px; }
 footer a { color: var(--accent-light); text-decoration: none; }
 @media (max-width: 720px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 2rem; } .main { padding: 32px 18px; } nav { padding: 12px 18px; gap: 18px; } .nav-badge { margin-left: 0; } }
@@ -69,7 +70,7 @@ footer a { color: var(--accent-light); text-decoration: none; }
 </div>
 
 <div class="kpi-grid">
-  <div class="kpi-card"><div class="kpi-value">6</div><div class="kpi-label">Rubriques</div></div>
+  <div class="kpi-card"><div class="kpi-value">7</div><div class="kpi-label">Rubriques</div></div>
   <div class="kpi-card"><div class="kpi-value">3</div><div class="kpi-label">Sc&eacute;narios types</div></div>
   <div class="kpi-card"><div class="kpi-value">7</div><div class="kpi-label">Leviers Comm &amp; Market</div></div>
   <div class="kpi-card"><div class="kpi-value">v0.1</div><div class="kpi-label">Version</div></div>
@@ -121,7 +122,49 @@ footer a { color: var(--accent-light); text-decoration: none; }
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="num">2</span> Leviers Comm &amp; Marketing</div>
+    <div class="section-title"><span class="num">2</span> Tutoriels anim&eacute;s</div>
+    <div class="section-intro">Des d&eacute;monstrations anim&eacute;es, &eacute;cran par &eacute;cran, avec narration voix off. Les cartes marqu&eacute;es <em>Aper&ccedil;u</em> illustrent des modules en cours de construction.</div>
+    <div class="cards-grid">
+      <a class="doc-card" href="tuto-pipeline-stages.html">
+        <span class="icon">&#128203;</span>
+        <span class="title">&Eacute;tapes du pipeline</span>
+        <span class="desc">R&eacute;ordonner, ajouter et d&eacute;sactiver les colonnes du kanban.</span>
+      </a>
+      <a class="doc-card" href="tuto-scenario-partenaire.html">
+        <span class="icon">&#129309;</span>
+        <span class="title">Activer un partenaire</span>
+        <span class="desc">D'un prescripteur cibl&eacute; jusqu'&agrave; actif, avec prochaine action.</span>
+      </a>
+      <a class="doc-card" href="tuto-reseaux-sociaux.html"><span class="badge-preview">Aper&ccedil;u</span>
+        <span class="icon">&#128241;</span>
+        <span class="title">R&eacute;seaux sociaux</span>
+        <span class="desc">Cr&eacute;er et planifier un post sur un canal.</span>
+      </a>
+      <a class="doc-card" href="tuto-emailing.html"><span class="badge-preview">Aper&ccedil;u</span>
+        <span class="icon">&#128231;</span>
+        <span class="title">Emailing</span>
+        <span class="desc">Cr&eacute;er et programmer une campagne email.</span>
+      </a>
+      <a class="doc-card" href="tuto-evenements.html"><span class="badge-preview">Aper&ccedil;u</span>
+        <span class="icon">&#128197;</span>
+        <span class="title">&Eacute;v&eacute;nements</span>
+        <span class="desc">Cr&eacute;er un &eacute;v&eacute;nement ou un webinaire.</span>
+      </a>
+      <a class="doc-card" href="tuto-presse.html"><span class="badge-preview">Aper&ccedil;u</span>
+        <span class="icon">&#128240;</span>
+        <span class="title">Relations presse</span>
+        <span class="desc">Suivre une action presse, du ciblage &agrave; la retomb&eacute;e.</span>
+      </a>
+      <a class="doc-card" href="tuto-scenario-multicanal.html"><span class="badge-preview">Aper&ccedil;u</span>
+        <span class="icon">&#128226;</span>
+        <span class="title">Campagne multicanal</span>
+        <span class="desc">D'un contenu pilier vers post, email et webinaire.</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">3</span> Leviers Comm &amp; Marketing</div>
     <div class="section-intro">Activez et pilotez chacun de vos leviers d'acquisition.</div>
     <div class="cards-grid">
       <a class="doc-card" href="com-sources-leads.html">
@@ -163,7 +206,7 @@ footer a { color: var(--accent-light); text-decoration: none; }
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="num">3</span> Administration</div>
+    <div class="section-title"><span class="num">4</span> Administration</div>
     <div class="section-intro">Param&eacute;trage et personnalisation de votre espace.</div>
     <div class="cards-grid">
       <a class="doc-card" href="ops-parametres.html">
@@ -190,7 +233,7 @@ footer a { color: var(--accent-light); text-decoration: none; }
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="num">4</span> R&eacute;f&eacute;rence</div>
+    <div class="section-title"><span class="num">5</span> R&eacute;f&eacute;rence</div>
     <div class="section-intro">Pour aller plus loin et lever les doutes.</div>
     <div class="cards-grid">
       <a class="doc-card" href="ref-glossaire.html">
@@ -212,7 +255,7 @@ footer a { color: var(--accent-light); text-decoration: none; }
   </div>
 
   <div class="section">
-    <div class="section-title"><span class="num">5</span> Sc&eacute;narios</div>
+    <div class="section-title"><span class="num">6</span> Sc&eacute;narios</div>
     <div class="section-intro">Des parcours complets, du besoin au r&eacute;sultat.</div>
     <div class="cards-grid">
       <a class="doc-card" href="scenarios/qualifier-lead.html">
