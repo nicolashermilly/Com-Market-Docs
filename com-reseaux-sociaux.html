@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R&eacute;seaux sociaux <title>Pipeline &amp; leads &mdash; Cockpit'Gest</title>mdash; Cockpit'Gest</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --base: #1A1226; --base-800: #251B33; --base-700: #322545; --base-600: #3F2E57;
+  --accent: #A855F7; --accent-light: #C99BF5; --sidebar: #211A2E;
+  --info: #38BDF8; --green: #34D399; --red: #F87171; --orange: #FBBF24;
+  --text: #EDE7F4; --text-muted: #A99FB8; --border: #2E2440; --card: #251B33;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Space Grotesk', sans-serif; background: var(--base); color: var(--text); min-height: 100vh; line-height: 1.6; }
+nav { position: sticky; top: 0; z-index: 100; background: rgba(33,26,46,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(168,85,247,0.2); padding: 14px 32px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+.nav-logo { font-size: 1.1rem; color: var(--accent-light); font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
+nav a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color .2s; }
+nav a:hover { color: var(--accent-light); }
+.nav-badge { margin-left: auto; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4); color: var(--accent-light); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.hero { background: linear-gradient(135deg, #211A2E 0%, #2C2140 50%, #211A2E 100%); border-bottom: 1px solid rgba(168,85,247,0.15); padding: 56px 32px 44px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.12) 0%, transparent 70%); pointer-events: none; }
+.hero-label { display: inline-block; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: var(--accent-light); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; position: relative; z-index: 1; }
+.hero .emoji { display: block; font-size: 2.4rem; margin-bottom: 8px; line-height: 1; }
+.hero h1 { font-size: 2.4rem; font-weight: 700; color: #FBFAFE; margin-bottom: 12px; letter-spacing: -0.02em; position: relative; z-index: 1; }
+.hero p { color: var(--text-muted); font-size: 0.95rem; max-width: 640px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 18px; position: relative; z-index: 1; }
+.hero-tag { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-size: 0.72rem; padding: 3px 10px; border-radius: 14px; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(168,85,247,0.1); border-top: 1px solid rgba(168,85,247,0.1); border-bottom: 1px solid rgba(168,85,247,0.1); }
+.kpi-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-card { background: var(--base); padding: 26px 18px; text-align: center; transition: background .2s; }
+.kpi-card:hover { background: var(--base-800); }
+.kpi-value { font-size: 2rem; font-weight: 700; color: var(--accent-light); line-height: 1; margin-bottom: 8px; }
+.kpi-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; }
+.main { max-width: 960px; margin: 0 auto; padding: 48px 24px 32px; }
+.section-title { font-size: 1.3rem; font-weight: 600; color: #FBFAFE; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid rgba(168,85,247,0.2); display: flex; align-items: center; gap: 12px; }
+.section-title .num { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: var(--accent-light); font-size: 0.75rem; font-weight: 700; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; }
+.section { margin-bottom: 48px; }
+.section-intro { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+.step-list { display: flex; flex-direction: column; gap: 14px; }
+.step-item { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; overflow: hidden; transition: border-color .2s; }
+.step-item:hover { border-color: rgba(168,85,247,0.25); }
+.step-header { display: flex; align-items: center; gap: 16px; padding: 16px 20px; flex-wrap: wrap; }
+.step-num { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; color: var(--accent-light); background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); padding: 6px 12px; border-radius: 6px; min-width: 50px; text-align: center; }
+.step-title { font-weight: 600; font-size: 0.95rem; flex: 1; color: #FBFAFE; }
+.step-body { padding: 0 20px 18px; border-top: 1px solid rgba(255,255,255,0.05); }
+.step-items { list-style: none; padding-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.step-items li { font-size: 0.87rem; color: var(--text-muted); padding-left: 18px; position: relative; }
+.step-items li::before { content: '>'; position: absolute; left: 0; top: 0; color: var(--accent); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+.step-items li strong { color: var(--text); font-weight: 600; }
+.step-items li code { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: rgba(15,10,22,0.6); padding: 1px 6px; border-radius: 4px; color: var(--accent-light); }
+.step-tip { background: rgba(168,85,247,0.06); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 14px; font-size: 0.85rem; color: var(--accent-light); }
+.step-tip strong { color: var(--accent); }
+.step-warn { background: rgba(248,113,113,0.06); border-left: 3px solid var(--red); border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 14px; font-size: 0.85rem; color: #FCA5A5; }
+.step-warn strong { color: var(--red); }
+.step-ok { background: rgba(52,211,153,0.06); border-left: 3px solid var(--green); border-radius: 0 6px 6px 0; padding: 10px 14px; margin-top: 14px; font-size: 0.85rem; color: #86EFAC; }
+.step-ok strong { color: var(--green); }
+.table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 8px; background: var(--card); border-radius: 8px; overflow: hidden; }
+.table th { text-align: left; padding: 10px 14px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-muted); }
+.table tr:last-child td { border-bottom: none; }
+.table td:first-child { color: var(--text); font-weight: 500; }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--accent-light); }
+.ref-block { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; }
+.ref-block h3 { font-size: 1.05rem; color: #FBFAFE; margin-bottom: 10px; font-weight: 600; }
+.ref-block p, .ref-block li { color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; }
+.ref-block p { margin-bottom: 8px; }
+.ref-block ul { padding-left: 18px; }
+.ref-block a { color: var(--accent-light); text-decoration: none; }
+.faq-item { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; margin-bottom: 8px; overflow: hidden; transition: border-color .2s; }
+.faq-item:hover { border-color: rgba(168,85,247,0.2); }
+.faq-item details summary { padding: 14px 18px; cursor: pointer; font-weight: 600; font-size: 0.92rem; color: #FBFAFE; display: flex; align-items: center; gap: 12px; list-style: none; }
+.faq-item details summary::-webkit-details-marker { display: none; }
+.faq-item details summary::before { content: '+'; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); border-radius: 6px; color: var(--accent-light); font-family: 'JetBrains Mono', monospace; font-weight: 700; flex-shrink: 0; transition: transform .2s; }
+.faq-item details[open] summary::before { content: '-'; }
+.faq-item details summary:hover { color: var(--accent-light); }
+.faq-answer { padding: 0 18px 16px 52px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.65; }
+.faq-answer code { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: rgba(15,10,22,0.6); padding: 1px 6px; border-radius: 4px; color: var(--accent-light); }
+.faq-answer strong { color: var(--text); }
+.faq-answer a { color: var(--accent-light); text-decoration: none; }
+footer { text-align: center; padding: 28px 24px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; color: var(--text-muted); margin-top: 40px; }
+footer a { color: var(--accent-light); text-decoration: none; }
+.tuto-cta { display: flex; align-items: center; gap: 16px; background: linear-gradient(135deg, rgba(168,85,247,0.12), rgba(168,85,247,0.04)); border: 1px solid rgba(168,85,247,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 36px; text-decoration: none; color: inherit; transition: border-color .2s, transform .2s; }
+.tuto-cta:hover { border-color: rgba(168,85,247,0.55); transform: translateY(-2px); }
+.tuto-cta .play { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #1A1226; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
+.tuto-cta .tx { flex: 1; }
+.tuto-cta .tx b { display: block; color: #FBFAFE; font-size: 0.95rem; margin-bottom: 2px; }
+.tuto-cta .tx span { font-size: 0.83rem; color: var(--text-muted); }
+.tuto-cta .arrow { color: var(--accent-light); font-size: 1.2rem; flex-shrink: 0; }
+@media (max-width: 720px) { .kpi-grid, .kpi-grid.cols-3 { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 1.8rem; } .main { padding: 32px 18px; } nav { padding: 12px 18px; gap: 18px; } .nav-badge { margin-left: 0; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index-complet.html" class="nav-logo">Cockpit'Gest Docs</a>
+  <a href="index-complet.html">Accueil</a>
+  <a href="notice-utilisation.html">Notice</a>
+  <a href="ref-faq.html">FAQ</a>
+  <span class="nav-badge">v0.1</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Levier Comm &amp; Marketing</div>
+  <span class="emoji">&#128241;</span>
+  <h1>R&eacute;seaux sociaux</h1>
+  <p>Planifiez et documentez vos publications sociales : un post par canal, rattachable &agrave; un
+     contenu et &agrave; un mod&egrave;le, suivi de Brouillon jusqu'&agrave; Publi&eacute;. Le module
+     organise votre production ; la publication, elle, reste manuelle sur chaque r&eacute;seau.</p>
+  <div class="hero-tags">
+    <span class="hero-tag">Planification</span>
+    <span class="hero-tag">Multi-canal</span>
+    <span class="hero-tag">Suivi des statuts</span>
+  </div>
+</div>
+
+<div class="kpi-grid cols-3">
+  <div class="kpi-card"><div class="kpi-value">3</div><div class="kpi-label">Statuts de suivi</div></div>
+  <div class="kpi-card"><div class="kpi-value">0</div><div class="kpi-label">Publication automatique</div></div>
+  <div class="kpi-card"><div class="kpi-value">1&rarr;N</div><div class="kpi-label">Canaux</div></div>
+</div>
+
+<div class="main">
+
+  <a class="tuto-cta" href="tuto-reseaux-sociaux.html">
+    <span class="play">&#9654;</span>
+    <span class="tx"><b>Tutoriel anim&eacute; : cr&eacute;er et planifier un post</b><span>D&eacute;mo &eacute;cran par &eacute;cran, du tableau des posts jusqu'&agrave; la planification.</span></span>
+    <span class="arrow">&rarr;</span>
+  </a>
+
+  <div class="section" id="intro">
+    <div class="section-title"><span class="num">1</span> &Agrave; quoi sert cet &eacute;cran ?</div>
+    <p class="section-intro">Centraliser la pr&eacute;paration de vos posts : un message, un canal, un statut
+       qui dit o&ugrave; vous en &ecirc;tes.</p>
+
+    <div class="ref-block">
+      <h3>Le principe</h3>
+      <p>Chaque post porte un <strong>titre interne</strong> (pour vous y retrouver), un
+         <strong>canal</strong> de diffusion, un <strong>texte</strong>, et un
+         <strong>statut</strong> qui d&eacute;crit son avancement. Vous pouvez le rattacher &agrave; un
+         <strong>contenu</strong> pilier (un article que le post relaie) et &agrave; un
+         <strong>mod&egrave;le</strong> de publication. Le cycle de vie va de
+         <code>brouillon</code> &agrave; <code>planifie</code> puis <code>publie</code>.</p>
+    </div>
+
+    <div class="ref-block">
+      <h3>Pas de publication automatique</h3>
+      <p>Cockpit'Gest <strong>planifie et documente</strong> vos posts : il ne publie rien &agrave; votre
+         place et n'est connect&eacute; &agrave; aucun r&eacute;seau (pas de Buffer, Meta, LinkedIn API).
+         Vous publiez vous-m&ecirc;me sur le r&eacute;seau, puis vous revenez coller le
+         <strong>lien du post</strong> et passer le statut &agrave; <code>publie</code>.</p>
+    </div>
+  </div>
+
+  <div class="section" id="utiliser">
+    <div class="section-title"><span class="num">2</span> Cr&eacute;er et planifier un post</div>
+    <p class="section-intro">Les gestes du quotidien, dans l'ordre.</p>
+    <div class="step-list">
+
+      <div class="step-item">
+        <div class="step-header"><span class="step-num">2.1</span><span class="step-title">Nouveau post</span></div>
+        <div class="step-body">
+          <ul class="step-items">
+            <li>Cliquez sur <strong>Nouveau post</strong> : un panneau d'&eacute;dition s'ouvre sur la droite.</li>
+            <li>Le <strong>titre interne</strong> est le seul champ obligatoire ; tout le reste est facultatif.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header"><span class="step-num">2.2</span><span class="step-title">Renseigner le post</span></div>
+        <div class="step-body">
+          <ul class="step-items">
+            <li>Choisissez le <strong>canal</strong> (aliment&eacute; par <span class="mono">Param. &rsaquo; Canaux</span>).</li>
+            <li>Rattachez si besoin un <strong>contenu</strong> li&eacute; et un <strong>mod&egrave;le</strong>
+                de type <code>post_social</code> ; chaque liste propose une option <em>Aucun</em>.</li>
+            <li>R&eacute;digez le <strong>texte</strong> du post.</li>
+          </ul>
+          <div class="step-tip"><strong>Astuce :</strong> rattacher un post &agrave; un contenu pilier garde
+             le lien entre votre article de fond et ses d&eacute;clinaisons sociales.</div>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header"><span class="step-num">2.3</span><span class="step-title">Planifier</span></div>
+        <div class="step-body">
+          <ul class="step-items">
+            <li>Renseignez la <strong>date de planification</strong> et passez le statut &agrave;
+                <code>planifie</code>.</li>
+            <li>Enregistrez : le post rejoint le tableau, filtrable par statut et par canal.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header"><span class="step-num">2.4</span><span class="step-title">Publier et tracer</span></div>
+        <div class="step-body">
+          <ul class="step-items">
+            <li>Une fois le post en ligne sur le r&eacute;seau, passez le statut &agrave; <code>publie</code>.</li>
+            <li>Collez le <strong>lien du post</strong> et la <strong>date de publication</strong> pour
+                garder la trace.</li>
+          </ul>
+          <div class="step-ok"><strong>Bon &agrave; savoir :</strong> il n'y a pas de suppression. Un post
+             se g&egrave;re par son statut, ce qui pr&eacute;serve l'historique de votre production.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section" id="champs">
+    <div class="section-title"><span class="num">3</span> R&eacute;f&eacute;rence des champs</div>
+    <table class="table">
+      <thead>
+        <tr><th>Champ</th><th>Type</th><th>Obligatoire</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Titre interne</td><td class="mono">texte</td><td>Oui</td><td>Libell&eacute; du post, pour le retrouver dans le tableau</td></tr>
+        <tr><td>Canal</td><td class="mono">liste</td><td>Non</td><td>Canal de diffusion (Param. &rsaquo; Canaux)</td></tr>
+        <tr><td>Contenu li&eacute;</td><td class="mono">liste</td><td>Non</td><td>Contenu pilier que le post relaie</td></tr>
+        <tr><td>Mod&egrave;le</td><td class="mono">liste</td><td>Non</td><td>Gabarit de type post_social</td></tr>
+        <tr><td>Statut</td><td class="mono">liste</td><td>Oui</td><td>brouillon / planifie / publie</td></tr>
+        <tr><td>Texte</td><td class="mono">texte</td><td>Non</td><td>Corps du post</td></tr>
+        <tr><td>Date de planification</td><td class="mono">date</td><td>Non</td><td>Date de publication pr&eacute;vue</td></tr>
+        <tr><td>Date de publication</td><td class="mono">datetime</td><td>Non</td><td>Date et heure r&eacute;elles de mise en ligne</td></tr>
+        <tr><td>Lien du post</td><td class="mono">texte</td><td>Non</td><td>URL du post publi&eacute;</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section" id="faq">
+    <div class="section-title"><span class="num">4</span> Questions fr&eacute;quentes</div>
+
+    <div class="faq-item">
+      <details>
+        <summary>Le post est-il publi&eacute; automatiquement sur le r&eacute;seau ?</summary>
+        <div class="faq-answer">Non. Le module <strong>planifie et documente</strong> ; il n'est connect&eacute;
+           &agrave; aucun r&eacute;seau. Vous publiez vous-m&ecirc;me, puis revenez coller l'URL et passer le
+           statut &agrave; <code>publie</code>.</div>
+      </details>
+    </div>
+
+    <div class="faq-item">
+      <details>
+        <summary>Quelle diff&eacute;rence entre le canal et le contenu li&eacute; ?</summary>
+        <div class="faq-answer">Le <strong>canal</strong> indique o&ugrave; le post para&icirc;t (LinkedIn,
+           Facebook&hellip;). Le <strong>contenu li&eacute;</strong> est l'article de fond que le post relaie :
+           c'est ce qui permet de regrouper une m&ecirc;me id&eacute;e d&eacute;clin&eacute;e sur plusieurs
+           canaux.</div>
+      </details>
+    </div>
+
+    <div class="faq-item">
+      <details>
+        <summary>Puis-je supprimer un post ?</summary>
+        <div class="faq-answer">Il n'y a pas de suppression d&eacute;finitive. Un post se pilote par son
+           <strong>statut</strong> ; laisser l'historique en place garde une vue compl&egrave;te de votre
+           production.</div>
+      </details>
+    </div>
+
+  </div>
+
+</div>
+<footer>
+  Cockpit'Gest &mdash; No Sage's Editor &mdash; v0.1 &middot; Documentation utilisateur
+  <br>
+  &#128231; <a href="mailto:contact@no-sages-editor.com">contact@no-sages-editor.com</a>
+  &middot;
+  <a href="index-complet.html">&larr; Documentation</a>
+</footer>
+</body>
+</html>
