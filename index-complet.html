@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation &mdash; Cockpit'Gest</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --base: #1A1226; --base-800: #251B33; --base-700: #322545; --base-600: #3F2E57;
+  --accent: #A855F7; --accent-light: #C99BF5; --sidebar: #211A2E;
+  --info: #38BDF8; --green: #34D399; --red: #F87171; --orange: #FBBF24;
+  --text: #EDE7F4; --text-muted: #A99FB8; --border: #2E2440; --card: #251B33;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Space Grotesk', sans-serif; background: var(--base); color: var(--text); min-height: 100vh; line-height: 1.6; }
+nav { position: sticky; top: 0; z-index: 100; background: rgba(33,26,46,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(168,85,247,0.2); padding: 14px 32px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+.nav-logo { font-size: 1.1rem; color: var(--accent-light); font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
+nav a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color .2s; }
+nav a:hover { color: var(--accent-light); }
+.nav-badge { margin-left: auto; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4); color: var(--accent-light); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.hero { background: linear-gradient(135deg, #211A2E 0%, #2C2140 50%, #211A2E 100%); border-bottom: 1px solid rgba(168,85,247,0.15); padding: 60px 32px 48px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 50% 0%, rgba(168,85,247,0.12) 0%, transparent 70%); pointer-events: none; }
+.hero-label { display: inline-block; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: var(--accent-light); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; position: relative; z-index: 1; }
+.hero .emoji { display: block; font-size: 2.6rem; margin-bottom: 8px; line-height: 1; }
+.hero h1 { font-size: 2.6rem; font-weight: 700; color: #FBFAFE; margin-bottom: 12px; letter-spacing: -0.02em; position: relative; z-index: 1; }
+.hero p { color: var(--text-muted); font-size: 0.98rem; max-width: 660px; margin: 0 auto; position: relative; z-index: 1; }
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(168,85,247,0.1); border-top: 1px solid rgba(168,85,247,0.1); border-bottom: 1px solid rgba(168,85,247,0.1); }
+.kpi-card { background: var(--base); padding: 26px 18px; text-align: center; transition: background .2s; }
+.kpi-card:hover { background: var(--base-800); }
+.kpi-value { font-size: 2rem; font-weight: 700; color: var(--accent-light); line-height: 1; margin-bottom: 8px; }
+.kpi-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; }
+.main { max-width: 1000px; margin: 0 auto; padding: 48px 24px 32px; }
+.section { margin-bottom: 44px; }
+.section-title { font-size: 1.3rem; font-weight: 600; color: #FBFAFE; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+.section-title .num { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: var(--accent-light); font-size: 0.75rem; font-weight: 700; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; }
+.section-intro { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(168,85,247,0.15); }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.doc-card { background: var(--card); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: all .2s; position: relative; }
+a.doc-card:hover { border-color: rgba(168,85,247,0.35); transform: translateY(-2px); }
+.doc-card .icon { font-size: 1.6rem; }
+.doc-card .title { font-weight: 600; font-size: 0.98rem; color: #FBFAFE; }
+.doc-card .desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; flex: 1; }
+.doc-card.soon { opacity: 0.5; cursor: default; }
+.doc-card.soon .title { color: var(--text-muted); }
+.badge-soon { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; }
+footer { text-align: center; padding: 28px 24px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; color: var(--text-muted); margin-top: 40px; }
+footer a { color: var(--accent-light); text-decoration: none; }
+@media (max-width: 720px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .hero h1 { font-size: 2rem; } .main { padding: 32px 18px; } nav { padding: 12px 18px; gap: 18px; } .nav-badge { margin-left: 0; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index-complet.html" class="nav-logo">Cockpit'Gest Docs</a>
+  <a href="index-complet.html">Accueil</a>
+  <a href="guide-parametrage.html">Param&eacute;trage</a>
+  <a href="notice-utilisation.html">Notice</a>
+  <a href="ref-faq.html">FAQ</a>
+  <span class="nav-badge">v0.1</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Documentation</div>
+  <span class="emoji">&#129518;</span>
+  <h1>Documentation Cockpit'Gest</h1>
+  <p>Le cockpit de traction marketing et commerciale. Retrouvez ici toutes les notices d'utilisation,
+     guides de param&eacute;trage et parcours types pour piloter vos leviers de communication et votre
+     pipeline commercial.</p>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi-card"><div class="kpi-value">6</div><div class="kpi-label">Rubriques</div></div>
+  <div class="kpi-card"><div class="kpi-value">3</div><div class="kpi-label">Sc&eacute;narios types</div></div>
+  <div class="kpi-card"><div class="kpi-value">7</div><div class="kpi-label">Leviers Comm &amp; Market</div></div>
+  <div class="kpi-card"><div class="kpi-value">v0.1</div><div class="kpi-label">Version</div></div>
+</div>
+
+<div class="main">
+  <div class="section">
+    <div class="section-title"><span class="num">0</span> D&eacute;marrage</div>
+    <div class="section-intro">Les indispensables pour bien commencer avec Cockpit'Gest.</div>
+    <div class="cards-grid">
+      <a class="doc-card" href="guide-parametrage.html">
+        <span class="icon">&#128640;</span>
+        <span class="title">Guide de param&eacute;trage</span>
+        <span class="desc">Premi&egrave;re configuration : entreprise, charte, canaux et premiers leviers.</span>
+      </a>
+      <a class="doc-card" href="notice-utilisation.html">
+        <span class="icon">&#128214;</span>
+        <span class="title">Notice d'utilisation</span>
+        <span class="desc">Tour complet de l'interface : cockpit, pipeline, leviers, param&egrave;tres.</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">1</span> Prise en main</div>
+    <div class="section-intro">Les briques centrales du pilotage commercial et marketing.</div>
+    <div class="cards-grid">
+      <a class="doc-card" href="com-cockpit.html">
+        <span class="icon">&#128202;</span>
+        <span class="title">Cockpit &amp; KPI</span>
+        <span class="desc">Tableau de bord, indicateurs cl&eacute;s et lecture de la performance.</span>
+      </a>
+      <a class="doc-card" href="com-pipeline.html">
+        <span class="icon">&#128203;</span>
+        <span class="title">Pipeline &amp; leads</span>
+        <span class="desc">Le kanban commercial : &eacute;tapes, fiches leads, suivi des opportunit&eacute;s.</span>
+      </a>
+      <a class="doc-card" href="com-canaux.html">
+        <span class="icon">&#128226;</span>
+        <span class="title">Canaux de diffusion</span>
+        <span class="desc">D&eacute;finir, ordonner et activer vos canaux : blog, social, email, presse.</span>
+      </a>
+      <a class="doc-card" href="com-verticales.html">
+        <span class="icon">&#128208;</span>
+        <span class="title">Verticales / segments</span>
+        <span class="desc">Cibler vos audiences et segmenter votre communication.</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">2</span> Leviers Comm &amp; Marketing</div>
+    <div class="section-intro">Activez et pilotez chacun de vos leviers d'acquisition.</div>
+    <div class="cards-grid">
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#127919;</span>
+        <span class="title">Sources de leads</span>
+        <span class="desc">D'o&ugrave; viennent vos contacts, rattach&eacute;s &agrave; leurs canaux.</span>
+      </div>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#129309;</span>
+        <span class="title">Partenariats / Prescripteurs</span>
+        <span class="desc">G&eacute;rer votre r&eacute;seau d'apporteurs et de prescripteurs.</span>
+      </div>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#129522;</span>
+        <span class="title">Lead magnets</span>
+        <span class="desc">Cr&eacute;er des aimants &agrave; prospects et suivre les t&eacute;l&eacute;chargements.</span>
+      </div>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#9999;</span>
+        <span class="title">Contenus &amp; SEO</span>
+        <span class="desc">Calendrier &eacute;ditorial, articles et planification des publications.</span>
+      </div>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#128231;</span>
+        <span class="title">Emailing / Newsletter</span>
+        <span class="desc">Campagnes email, s&eacute;quences et suivi des envois.</span>
+      </div>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#128197;</span>
+        <span class="title">&Eacute;v&eacute;nements / Webinaires</span>
+        <span class="desc">Organiser et suivre vos &eacute;v&eacute;nements et webinaires.</span>
+      </div>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#128240;</span>
+        <span class="title">Relations presse</span>
+        <span class="desc">Communiqu&eacute;s, contacts m&eacute;dias et retomb&eacute;es.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">3</span> Administration</div>
+    <div class="section-intro">Param&eacute;trage et personnalisation de votre espace.</div>
+    <div class="cards-grid">
+      <a class="doc-card" href="ops-parametres.html">
+        <span class="icon">&#9881;</span>
+        <span class="title">Param&egrave;tres g&eacute;n&eacute;raux</span>
+        <span class="desc">Le hub Param&egrave;tres et l'organisation des r&eacute;glages.</span>
+      </a>
+      <a class="doc-card" href="ops-entreprise.html">
+        <span class="icon">&#127970;</span>
+        <span class="title">Mon entreprise</span>
+        <span class="desc">Raison sociale, coordonn&eacute;es et identifiants.</span>
+      </a>
+      <a class="doc-card" href="ops-editions.html">
+        <span class="icon">&#128196;</span>
+        <span class="title">&Eacute;ditions &amp; mod&egrave;les</span>
+        <span class="desc">En-t&ecirc;tes, pieds de page et textes l&eacute;gaux des documents.</span>
+      </a>
+      <a class="doc-card" href="ops-charte.html">
+        <span class="icon">&#127912;</span>
+        <span class="title">Charte graphique</span>
+        <span class="desc">Logo, couleurs et personnalisation de l'interface.</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">4</span> R&eacute;f&eacute;rence</div>
+    <div class="section-intro">Pour aller plus loin et lever les doutes.</div>
+    <div class="cards-grid">
+      <a class="doc-card" href="ref-glossaire.html">
+        <span class="icon">&#128218;</span>
+        <span class="title">Glossaire</span>
+        <span class="desc">Tous les termes Cockpit'Gest expliqu&eacute;s.</span>
+      </a>
+      <a class="doc-card" href="ref-faq.html">
+        <span class="icon">&#10067;</span>
+        <span class="title">FAQ</span>
+        <span class="desc">Les questions les plus fr&eacute;quentes, regroup&eacute;es par th&egrave;me.</span>
+      </a>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#129517;</span>
+        <span class="title">Parcours types</span>
+        <span class="desc">Raccourcis vers les t&acirc;ches courantes pas &agrave; pas.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">5</span> Sc&eacute;narios</div>
+    <div class="section-intro">Des parcours complets, du besoin au r&eacute;sultat.</div>
+    <div class="cards-grid">
+      <a class="doc-card" href="scenarios/qualifier-lead.html">
+        <span class="icon">&#127919;</span>
+        <span class="title">Qualifier et suivre un lead</span>
+        <span class="desc">De la capture &agrave; la conversion dans le pipeline.</span>
+      </a>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#128226;</span>
+        <span class="title">Lancer une campagne multicanal</span>
+        <span class="desc">Du choix des canaux &agrave; la mesure des retomb&eacute;es.</span>
+      </div>
+      <div class="doc-card soon"><span class="badge-soon">Bient&ocirc;t</span>
+        <span class="icon">&#129309;</span>
+        <span class="title">Activer un partenaire prescripteur</span>
+        <span class="desc">Mettre en place et suivre un apporteur d'affaires.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Cockpit'Gest &mdash; No Sage's Editor &mdash; v0.1 &middot; Documentation utilisateur
+  <br>
+  &#128231; <a href="mailto:contact@no-sages-editor.com">contact@no-sages-editor.com</a>
+</footer>
+</body>
+</html>
